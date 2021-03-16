@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/pwillie/prometheus-es-adapter/pkg/elasticsearch"
 	"github.com/olivere/elastic/v7"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/pwillie/prometheus-es-adapter/pkg/elasticsearch"
 )
 
 // NewRouter returns a configured http router
@@ -19,8 +19,7 @@ func NewRouter(w *elasticsearch.WriteService, r *elasticsearch.ReadService) *htt
 // NewAdminRouter returns a configured http router for prom metrics and health checks
 func NewAdminRouter(client *elastic.Client) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", prometheus.Handler())
-	// creates /live and /ready endpoints
+	mux.Handle("/metrics", promhttp.Handler())
 	mux.Handle("/", healthzHandler(client))
 	return mux
 }

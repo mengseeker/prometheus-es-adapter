@@ -27,6 +27,15 @@ const indexTemplate = `{
 					},
 					"value": {
 						"type": "double"
+					},
+					"node_disk_written_bytes_total": {
+						"type": "double"
+					},
+					"node_disk_read_bytes_total": {
+						"type": "double"
+					},
+					"node_disk_discards_completed_total": {
+						"type": "double"
 					}
 				},
 				"dynamic_templates": [

@@ -6,11 +6,11 @@ import (
 	"math"
 	"time"
 
+	elastic "github.com/olivere/elastic/v7"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/prompb"
 	"go.uber.org/zap"
-	elastic "github.com/olivere/elastic/v7"
 )
 
 type prometheusSample struct {
@@ -75,7 +75,7 @@ func (svc *WriteService) Write(req []*prompb.TimeSeries) {
 			metric[model.LabelName(l.Name)] = model.LabelValue(l.Value)
 		}
 		for _, s := range ts.Samples {
-			v := float64(s.Value)
+			v := s.Value
 			if math.IsNaN(v) || math.IsInf(v, 0) {
 				svc.logger.Debug(fmt.Sprintf("invalid value %+v, skipping sample %+v", v, s))
 				continue
@@ -85,6 +85,7 @@ func (svc *WriteService) Write(req []*prompb.TimeSeries) {
 				v,
 				s.Timestamp,
 			}
+			// fmt.Printf("%#v\n", sample)
 			if svc.config.Daily {
 				index = svc.config.Alias + "-" + time.Unix(s.Timestamp/1000, 0).Format("2006-01-02")
 			}

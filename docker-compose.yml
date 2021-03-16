@@ -1,25 +1,19 @@
 version: '3.3'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: elasticsearch:7.10.1
     ports:
       - '9200:9200'
       - '9300:9300'
     environment:
       ES_NODE_NAME: elasticsearch
       discovery.type: single-node
-
-  ui-cerebro:
-    image: ludekvesely/elasticsearch-cerebro
-    links:
-      - elasticsearch
-    ports:
-      - '9000:9000'
-    environment:
-      ELASTICSEARCH_HOST: http://elasticsearch:9200
+      ES_JAVA_OPTS: "-Xms512m -Xmx1024m"
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.4.2
+    image: kibana:7.10.1
+    depends_on:
+      - elasticsearch
     links:
       - elasticsearch
     ports:
@@ -44,6 +38,9 @@ services:
   prometheus-es-adapter:
     build:
       context: .
+    depends_on:
+      - elasticsearch
+    restart: always
     ports:
       - '8000:8000'
       - '8001:9000'
