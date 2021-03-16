@@ -12,7 +12,7 @@ import (
 	"github.com/pwillie/prometheus-es-adapter/pkg/handlers"
 	"github.com/pwillie/prometheus-es-adapter/pkg/logger"
 	"go.uber.org/zap"
-	elastic "gopkg.in/olivere/elastic.v6"
+	elastic "github.com/olivere/elastic/v7"
 )
 
 var (

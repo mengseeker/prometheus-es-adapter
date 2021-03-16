@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-	elastic "gopkg.in/olivere/elastic.v6"
+	elastic "github.com/olivere/elastic/v7"
 )
 
 // IndexService will manage alias and indexes derived from the configured index alias
