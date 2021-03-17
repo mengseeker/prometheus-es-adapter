@@ -56,13 +56,13 @@ func (svc *ReadService) buildCommand(q *prompb.Query) *elastic.SearchService {
 	for _, m := range q.Matchers {
 		switch m.Type {
 		case prompb.LabelMatcher_EQ:
-			query = query.Filter(elastic.NewTermQuery("label."+m.Name, m.Value))
+			query = query.Filter(elastic.NewTermQuery(m.Name, m.Value))
 		case prompb.LabelMatcher_NEQ:
-			query = query.MustNot(elastic.NewTermQuery("label."+m.Name, m.Value))
+			query = query.MustNot(elastic.NewTermQuery(m.Name, m.Value))
 		case prompb.LabelMatcher_RE:
-			query = query.Filter(elastic.NewRegexpQuery("label."+m.Name, m.Value))
+			query = query.Filter(elastic.NewRegexpQuery(m.Name, m.Value))
 		case prompb.LabelMatcher_NRE:
-			query = query.MustNot(elastic.NewRegexpQuery("label."+m.Name, m.Value))
+			query = query.MustNot(elastic.NewRegexpQuery(m.Name, m.Value))
 		default:
 			svc.logger.Panic("unknown match", zap.String("type", m.Type.String()))
 		}
