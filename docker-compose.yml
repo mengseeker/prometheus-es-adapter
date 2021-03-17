@@ -20,6 +20,10 @@ services:
       - '5601:5601'
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+  # elastichd:
+  #   image: containerize/elastichd
+  #   ports:
+  #     - '9800:9800'
 
   prometheus:
     image: prom/prometheus
@@ -35,33 +39,33 @@ services:
     volumes:
       - ./test/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  prometheus-es-adapter:
-    build:
-      context: .
-    depends_on:
-      - elasticsearch
-    restart: always
-    ports:
-      - '8000:8000'
-      - '8001:9000'
-    environment:
-      - ES_URL=http://elasticsearch:9200
-      - ES_INDEX_DAILY=true
-      - ES_INDEX_SHARDS=1
-      - ES_INDEX_REPLICAS=0
-      - ES_INDEX_MAX_DOCS=2000
-      - DEBUG=true
+  # prometheus-es-adapter:
+  #   build:
+  #     context: .
+  #   depends_on:
+  #     - elasticsearch
+  #   restart: always
+  #   ports:
+  #     - '8000:8000'
+  #     - '8001:9000'
+  #   environment:
+  #     - ES_URL=http://elasticsearch:9200
+  #     - ES_INDEX_DAILY=true
+  #     - ES_INDEX_SHARDS=1
+  #     - ES_INDEX_REPLICAS=0
+  #     - ES_INDEX_MAX_DOCS=2000
+  #     - DEBUG=true
 
-  node-exporter:
-    image: prom/node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command: 
-      - '--path.procfs=/host/proc' 
-      - '--path.sysfs=/host/sys'
-      - --collector.filesystem.ignored-mount-points
-      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-    ports:
-      - 9100:9100
+  # node-exporter:
+  #   image: prom/node-exporter
+  #   volumes:
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /:/rootfs:ro
+  #   command: 
+  #     - '--path.procfs=/host/proc' 
+  #     - '--path.sysfs=/host/sys'
+  #     - --collector.filesystem.ignored-mount-points
+  #     - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+  #   ports:
+  #     - 9100:9100
